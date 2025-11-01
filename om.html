@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VASHUDHA KENDRA</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+</head>
+<body>
+
+<header>
+  <div class="brand">
+    <h1>VASHUDHA KENDRA</h1>
+    <hr>
+    <div><p>RAHUL THAKUR</p></div>
+  </div>
+
+  <div class="search">
+    <input id="searchInput" placeholder="सेवा खोजें...">
+  </div>
+
+  <nav id="mainNav">
+    <a href="#home">Home</a>
+    <a href="#services">Services</a>
+    <a href="#contact">Contact</a>
+  </nav>
+
+  <div class="hamburger" onclick="toggleMenu()">menu</div>
+  <div class="menu" id="menu">
+    <a data-tool="photo2pdf">Photo to PDF</a>
+    <a data-tool="pdfmerger">PDF Merger</a>
+    <a data-tool="bgremove">Background Remover</a>
+    <a data-tool="compressor">Image Compressor</a>
+    <a data-tool="jpgtopng">JPG to PNG</a>
+  </div>
+</header>
+
+<main>
+  <section id="home" class="hero">
+    <h2>"वसुधा केंद्र गौरा" ~ राहुल ठाकुर</h2>
+    <p>आरक्षित रेलवे टिकट, हवाई टिकट, पैन कार्ड, आयुष्मान् भारत योजना, दाखिल खारिज, आधार कार्ड, वोटर कार्ड, पासपोर्ट, किसान पंजी...</p>
+  </section>
+
+  <section id="services">
+    <h2>हमारी सेवाएँ</h2>
+    <div id="serviceList"></div>
+  </section>
+
+  <section class="cart" id="cartBox">
+    <h3>आपकी सेवाएँ</h3>
+    <ul id="cartItems"></ul>
+    <div class="total">कुल राशि: ₹<span id="total">0</span></div>
+    <div class="cart-actions">
+      <button class="pay" id="openBooking">Book Now</button>
+      <button class="btn" id="clearCart">Clear</button>
+    </div>
+  </section>
+
+  <section id="toolArea" style="display:none;">
+    <h2>Tools</h2>
+    <div id="toolContent"></div>
+  </section>
+
+  <!-- FEEDBACK + SEND MESSAGE -->
+  <section id="feedback">
+    <h2>संदेश भेजें</h2>
+    <div class="card" style="text-align:center;">
+      <button class="btn" id="sendFeedbackBtn" style="margin:8px; width:100%; max-width:300px;">Feedback दें</button>
+      <button class="pay" id="sendMessageBtn" style="margin:8px; width:100%; max-width:300px;">संदेश भेजें</button>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>संपर्क करें</h2>
+    <div class="card">
+      <p>INFRONT OF SBJI MANDI, GAURA BAZAR, 802166 BIHAR INDIA, RAHUL THAKUR</p>
+      <p>+91 80769 64752</p>
+      <p>vashudhakendra@gmail.com</p>
+    </div>
+  </section>
+</main>
+
+<!-- BOOKING INFO MODAL -->
+<div class="modal-backdrop" id="bookingModal">
+  <div class="modal">
+    <button class="btn-close" id="closeBookingModal">x</button>
+    <h3>अपनी जानकारी भरें</h3>
+    <form id="bookingInfoForm">
+      <label for="bookingName">पूरा नाम:</label>
+      <input type="text" id="bookingName" required>
+      <label for="bookingPhone">मोबाइल नंबर:</label>
+      <input type="tel" id="bookingPhone" pattern="[6-9][0-9]{9}" required>
+      <div class="actions" style="margin-top:20px;">
+        <button type="submit" class="pay">Continue</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- PAYMENT MODAL -->
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal">
+    <button class="btn-close" id="closeModal">x</button>
+    <h3>पेमेंट विकल्प</h3>
+    <div id="modalMsg" style="text-align:center; margin:15px 0; font-size:15px;">
+      पेमेंट कैसे करेंगे?
+    </div>
+    <div class="actions" id="paymentActions">
+      <button id="payCashBtn" class="btn">Pay Cash</button>
+      <button id="payOnlineBtn" class="pay">Pay Online</button>
+    </div>
+    <div id="slipArea" style="display:none; margin-top:15px; text-align:center;">
+      <p style="color:#66fcf1; margin:8px 0;">स्लिप तैयार है!</p>
+      <button id="downloadSlip" class="btn">Download Slip</button>
+    </div>
+  </div>
+</div>
+
+<!-- FEEDBACK MODAL -->
+<div class="modal-backdrop" id="feedbackModal">
+  <div class="modal">
+    <button class="btn-close" id="closeFeedbackModal">x</button>
+    <h3>Feedback दें</h3>
+    <form id="feedbackForm">
+      <label for="fbName">नाम:</label>
+      <input type="text" id="fbName" required>
+      <label for="fbPhone">मोबाइल:</label>
+      <input type="tel" id="fbPhone" pattern="[6-9][0-9]{9}" required>
+      <label for="fbMessage">आपका फीडबैक:</label>
+      <textarea id="fbMessage" rows="4" required></textarea>
+      <div class="actions" style="margin-top:15px;">
+        <button type="submit" class="pay">भेजें</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- MESSAGE MODAL -->
+<div class="modal-backdrop" id="messageModal">
+  <div class="modal">
+    <button class="btn-close" id="closeMessageModal">x</button>
+    <h3>संदेश भेजें</h3>
+    <form id="messageForm">
+      <label for="msgName">नाम:</label>
+      <input type="text" id="msgName" required>
+      <label for="msgPhone">मोबाइल:</label>
+      <input type="tel" id="msgPhone" pattern="[6-9][0-9]{9}" required>
+      <label for="msgText">आपका संदेश:</label>
+      <textarea id="msgText" rows="4" required></textarea>
+      <div class="actions" style="margin-top:15px;">
+        <button type="submit" class="pay">भेजें</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<footer>© <span id="year"></span> VASHUDHA KENDRA | All Rights Reserved</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script src="script.js"></script>
+</body>
+</html>
